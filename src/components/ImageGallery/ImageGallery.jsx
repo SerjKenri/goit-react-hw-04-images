@@ -3,7 +3,7 @@ import propTypes from 'prop-types';
 import css from './ImageGallery.module.css';
 import { fetchImagesApi } from 'Api/Api';
 import { toast } from 'react-toastify';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 

@@ -1,42 +1,39 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import css from './Model.module.css';
 import propTypes from 'prop-types';
 
-export class Model extends Component {
-    static propTypes = {
-        src: propTypes.string.isRequired,
-        alt: propTypes.string.isRequired,
-        onClose: propTypes.func.isRequired,
-    }
+function Model ({src, alt, onClose}) {
 
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleKeydownClose);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeydownClose);
-    }
-    
-    handleOverlayClose = e => {
-        const { onClose } = this.props;
-        if (e.currentTarget === e.target) {
-            this.props.onClose();
+    useEffect(() => {
+        const handleKeydownClose = e => {
+            if (e.code === 'Escape') {
+            onClose();
         }
     };
-    
-    handleKeydownClose = e => {
-        const { onClose } = this.props;
-        if (e.code === 'Escape') {
+    window.addEventListener('keydown', handleKeydownClose);
+    return () => {
+        window.removeEventListener('keydown', handleKeydownClose);
+    };
+    },[onClose]);
+
+    const handleOverlayClose = event => {
+        if (event.target === event.currentTarget) {
             onClose();
         }
     };
 
-    render(){
-        const {src, alt} = this.props;
         return (
         <div className={css.Overlay} >
-            <div className={css.Model} onClick={this.handleOverlayClose}>
+            <div className={css.Model} onClick={handleOverlayClose}>
                 <img src={src} alt={alt} />
             </div>
         </div>
-)}};
+)};
+
+Model.propTypes = {
+    src: propTypes.string.isRequired,
+    alt: propTypes.string.isRequired,
+    onClose: propTypes.func.isRequired,
+}
+
+export default Model;

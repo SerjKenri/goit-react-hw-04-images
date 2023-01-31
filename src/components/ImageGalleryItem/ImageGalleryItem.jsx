@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import propTypes from 'prop-types';
-import { Model } from 'components/Model/Model.jsx';
+import Model from 'components/Model/Model.jsx';
 import css from './ImageGalleryItem.module.css';
 
-export function ImageGalleryItem({id, images, largeImage, tags}) {
+function ImageGalleryItem({id, images, largeImage, tags}) {
     const [isModelOpen, setIsModelOpen] = useState(false);
 
-
+    const handleModelClose = () => {
+        setIsModelOpen(false)
+    }
+    const handleModelOpen = () => {
+        setIsModelOpen(true)
+    }
+    
     return (
-        <li className={css.ImageGalleryItem} key={id} onClick={() => setIsModelOpen(true)}>
+        <li className={css.ImageGalleryItem} key={id} onClick={handleModelOpen}>
             <img className={css.ImageGalleryItemImage} src={images} alt={tags} key={id}/>
-            {isModelOpen && (<Model src={largeImage} alt={tags} onClose={() => setIsModelOpen(false)}/>)}
+            {isModelOpen && (<Model src={largeImage} alt={tags} onClose={handleModelClose}/>)}
         </li>
 )}
 
@@ -20,3 +26,5 @@ ImageGalleryItem.propTypes = {
         id: propTypes.number.isRequired,
         tags: propTypes.string.isRequired,
     };
+
+export default ImageGalleryItem;
