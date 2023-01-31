@@ -6,11 +6,12 @@ import css from './ImageGalleryItem.module.css';
 function ImageGalleryItem({id, images, largeImage, tags}) {
     const [isModelOpen, setIsModelOpen] = useState(false);
 
-    const handleModelClose = () => {
-        setIsModelOpen(false)
-    }
     const handleModelOpen = () => {
-        setIsModelOpen(true)
+        setIsModelOpen(true);
+    }
+
+    const handleModelClose = () => {
+        setIsModelOpen(false);
     }
     
     return (

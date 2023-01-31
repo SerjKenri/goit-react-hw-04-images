@@ -18,13 +18,13 @@ function Model ({src, alt, onClose}) {
 
     const handleOverlayClose = event => {
         if (event.target === event.currentTarget) {
-            onClose();
-        }
+            onClose()
+        };
     };
 
         return (
-        <div className={css.Overlay} >
-            <div className={css.Model} onClick={handleOverlayClose}>
+        <div className={css.Overlay} onClick={handleOverlayClose}>
+            <div className={css.Model}>
                 <img src={src} alt={alt} />
             </div>
         </div>
