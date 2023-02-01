@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import css from './Model.module.css';
+import css from './Modal.module.css';
 import propTypes from 'prop-types';
 
-function Model ({src, alt, onClose}) {
+function Modal ({src, alt, onClose}) {
 
     useEffect(() => {
         const handleKeydownClose = e => {
@@ -30,10 +30,10 @@ function Model ({src, alt, onClose}) {
         </div>
 )};
 
-Model.propTypes = {
+Modal.propTypes = {
     src: propTypes.string.isRequired,
     alt: propTypes.string.isRequired,
     onClose: propTypes.func.isRequired,
 }
 
-export default Model;
+export default Modal;
