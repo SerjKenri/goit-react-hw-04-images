@@ -6,18 +6,15 @@ import css from './ImageGalleryItem.module.css';
 function ImageGalleryItem({id, images, largeImage, tags}) {
     const [isModelOpen, setIsModelOpen] = useState(false);
 
-    const handleModelOpen = () => {
-        setIsModelOpen(true);
+    const handleToggleModel = () => {
+        setIsModelOpen(!isModelOpen);
     }
 
-    const handleModelClose = () => {
-        setIsModelOpen(false);
-    }
     
     return (
-        <li className={css.ImageGalleryItem} key={id} onClick={handleModelOpen}>
+        <li className={css.ImageGalleryItem} key={id} onClick={handleToggleModel}>
             <img className={css.ImageGalleryItemImage} src={images} alt={tags} key={id}/>
-            {isModelOpen && (<Model src={largeImage} alt={tags} onClose={handleModelClose}/>)}
+            {isModelOpen && (<Model src={largeImage} alt={tags} onClose={handleToggleModel}/>)}
         </li>
 )}
 
