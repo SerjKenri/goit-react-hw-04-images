@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import css from './ImageGallery.module.css';
 import { fetchImagesApi } from 'Api/Api';
@@ -8,47 +8,45 @@ import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 
 
-export class ImageGallery extends Component {
-    static propTypes = {
-        request: propTypes.string.isRequired,
-    };
-    
-    state = {
-        gallery: [],
-        page: 1,
-        totalHits: 0,
-        error: null,
-        loader: false,
-        status: 'idle',
+export function ImageGallery({ request }) {
+    const [searchParams, setSearchParams] = useState('');
+    const [gallery, setGallery] = useState([]);
+    const [page, setPage] = useState(1);
+    const [totalHits, setTotalHits] = useState(0);
+    const [error, setError] = useState(null);
+    const [loader, setLoader] = useState(false);
+    const [status, setStatus] = useState('idle');
+
+    const resetRequest = () => {
+        setGallery([]);
+        setPage(1);
+        setTotalHits(0);
+        setError(null);
+        setLoader(false);
+        setStatus('idle')
     };
 
-    componentDidUpdate(prevProps, prevState) {
-        const prevRequest = prevProps.request;
-        const {request}= this.props;
-        const { page } = this.state;
-        const prevPage = prevState.page;
+    const handleButtonClick = () => {
+        setPage(prev => prev + 1);
+    };
 
-        if(prevRequest !== request) {
-            this.setState({loader: true, page: 1, gallery: []});
-            if(page === 1) {
-                this.fetchImages(request, page);
-            }
-        }else if (prevPage !== page) {
-            this.setState({loader: true});
-            this.fetchImages(request, page);
+    useEffect(() => {
+        resetRequest();
+        setSearchParams(request)
+    },[request]);
+
+
+    useEffect(() => {
+        if(!searchParams) {
+            return;
         }
-    };
 
-    fetchImages = () => {
-            const {request} = this.props;
-            const { page } = this.state;
-            this.setState({loader: true});
-            fetchImagesApi(request, page)
+        setLoader(true);
+            fetchImagesApi(searchParams, page)
                 .then(response => {
                     const {hits, totalHits} = response;
                     if(!hits.length) {
-                        toast.error(`Запрос ${request} не найден.`);
-                        // this.setState({status: 'idle'})
+                        toast.error(`Запрос ${searchParams} не найден.`);
                         return;
                     }
                     const newImages = hits.map(
@@ -59,29 +57,17 @@ export class ImageGallery extends Component {
                             largeImageURL,
                         })
                     );
-                    this.setState(prevState => ({
-                        gallery: [...prevState.gallery, ...newImages], totalHits, status: 'resolved'
-                    }))
+                    setGallery(prev => [...prev, ...newImages]);
+                    setTotalHits(totalHits);
+                    setStatus('resolved');
                 })
                 .catch(error => {
-                    this.setState({error, status: 'rejected'});
+                    setError(error);
+                    setStatus('rejected');
                 })
-                .finally (() => this.setState({loader: false}))
-    };
+                .finally (() => setLoader(false))
+    },[searchParams, page])
     
-
-    handleButtonClick = () => {
-        this.setState(prevState => ({
-            page: prevState.page + 1,
-        }))
-    };
-
-    handleImageClick = () => {
-
-    }
-    
-    render () {
-        const {gallery, status, error, totalHits, loader} = this.state;
 
         if(gallery.length === 0 && loader === false) {
             return <h1>Введите запрос для поиска</h1>
@@ -105,8 +91,11 @@ export class ImageGallery extends Component {
             ))}
             </ul>
             {loader && <Loader />}
-            {!loader && gallery.length < totalHits && <Button onClick={this.handleButtonClick}/>}
+            {!loader && gallery.length < totalHits && <Button onClick={handleButtonClick}/>}
         </>
         }
-}
-};
+    }
+
+    ImageGallery.propTypes = {
+        request: propTypes.string.isRequired,
+    };

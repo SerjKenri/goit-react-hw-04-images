@@ -6,9 +6,6 @@ import css from './ImageGalleryItem.module.css';
 function ImageGalleryItem({id, images, largeImage, tags}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // const handleToggleModal = () => {
-    //     setIsModalOpen(!isModalOpen);
-    // }
     const handleToggleModal = useCallback(() => {
         setIsModalOpen(!isModalOpen);
     }, [isModalOpen]);
