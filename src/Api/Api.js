@@ -1,5 +1,5 @@
 import axios from "axios";
-import propTypes from 'prop-types'
+
 
 axios.defaults.baseURL = `https://pixabay.com/api`;
 
@@ -11,7 +11,3 @@ export const fetchImagesApi = async (inputValue, pageNr) => {
     return response.data;
 };
 
-fetchImagesApi.propTypes = {
-    inputValue: propTypes.string.isRequired,
-    pageNr: propTypes.number.isRequired,
-};

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import css from './ImageGallery.module.css';
-import { fetchImagesApi } from 'Api/Api';
+import { fetchImagesApi } from 'api/api';
 import { toast } from 'react-toastify';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/Loader/Loader';
@@ -46,7 +46,7 @@ export function ImageGallery({ request }) {
                 .then(response => {
                     const {hits, totalHits} = response;
                     if(!hits.length) {
-                        toast.error(`Запрос ${searchParams} не найден.`);
+                        toast.warning(`Запрос ${searchParams} не найден.`);
                         return;
                     }
                     const newImages = hits.map(
@@ -64,17 +64,18 @@ export function ImageGallery({ request }) {
                 .catch(error => {
                     setError(error);
                     setStatus('rejected');
+                    resetRequest();
                 })
                 .finally (() => setLoader(false))
     },[searchParams, page])
     
 
-        if(gallery.length === 0 && loader === false) {
-            return <h1>Введите запрос для поиска</h1>
+        if(!gallery.length && !loader) {
+            return <h2>Введите запрос для поиска</h2>
         }
 
         if(status === 'rejected') {
-            return <h1>{error.message}</h1>
+            return toast.error(`${error.message}`)
         };
 
         if(status === 'resolved') {
