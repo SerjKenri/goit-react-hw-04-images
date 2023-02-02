@@ -16,17 +16,6 @@ export function ImageGallery({ request }) {
     const [loader, setLoader] = useState(false);
     const [status, setStatus] = useState('idle');
 
-    const k = {
-        dsdfasd: hello,
-        dsadas: dfasd,
-        dsdas: dsfafa,
-        dsdafa: dsadasd,
-        fgregr: dasdfaf,
-        dasdf: dsada,
-    };
-    const name = 'James';
-
-    const person = { first: name };
     const resetRequest = () => {
         setGallery([]);
         setPage(1);
