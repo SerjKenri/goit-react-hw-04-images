@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect} from 'react';
 import css from './Modal.module.css';
 import propTypes from 'prop-types';
 
@@ -16,10 +16,10 @@ function Modal ({src, alt, onClose}) {
     };
     },[onClose]);
 
-    const handleOverlayClose = event => {
-        if (event.target === event.currentTarget) {
-            onClose()
-        };
+    const handleOverlayClose = (event) => {
+        if (event.currentTarget === event.target) {
+            return onClose();
+        }
     };
 
         return (

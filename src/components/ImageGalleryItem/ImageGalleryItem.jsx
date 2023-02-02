@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import propTypes from 'prop-types';
 import Modal from 'components/Modal/Modal.jsx';
 import css from './ImageGalleryItem.module.css';
@@ -6,10 +6,9 @@ import css from './ImageGalleryItem.module.css';
 function ImageGalleryItem({id, images, largeImage, tags}) {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const handleToggleModal = useCallback(() => {
+    const handleToggleModal = () => {
         setIsModalOpen(!isModalOpen);
-    }, [isModalOpen]);
-
+    };
     
     return (
         <li className={css.ImageGalleryItem} key={id} onClick={handleToggleModal}>
