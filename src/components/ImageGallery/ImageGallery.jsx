@@ -40,26 +40,25 @@ export function ImageGallery({ request }) {
         if(!searchParams) {
             return;
         }
-
         setLoader(true);
-            fetchImagesApi(searchParams, page)
-                .then(response => {
-                    const {hits, totalHits} = response;
-                    if(!hits.length) {
-                        toast.warning(`Запрос ${searchParams} не найден.`);
-                        return;
-                    }
-                    const newImages = hits.map(
-                        ({ id, tags, webformatURL, largeImageURL}) => ({
-                            id,
-                            tags,
-                            webformatURL,
-                            largeImageURL,
-                        })
-                    );
-                    setGallery(prev => [...prev, ...newImages]);
-                    setTotalHits(totalHits);
-                    setStatus('resolved');
+        fetchImagesApi(searchParams, page)
+        .then(response => {
+            const {hits, totalHits} = response;
+            if(!hits.length) {
+                toast.warning(`Запрос ${searchParams} не найден.`);
+                return;
+            }
+            const newImages = hits.map(
+                ({ id, tags, webformatURL, largeImageURL}) => ({
+                    id,
+                    tags,
+                    webformatURL,
+                    largeImageURL,
+                })
+                );
+                setGallery(prev => [...prev, ...newImages]);
+                setTotalHits(totalHits);
+                setStatus('resolved');
                 })
                 .catch(error => {
                     setError(error);
@@ -67,10 +66,13 @@ export function ImageGallery({ request }) {
                     resetRequest();
                 })
                 .finally (() => setLoader(false))
-    },[searchParams, page])
+            },[searchParams, page])
     
+        if(loader) {
+            return <Loader/>
+        }
 
-        if(!gallery.length && !loader) {
+        if(searchParams === '' && !loader) {
             return <h2>Введите запрос для поиска</h2>
         }
 
@@ -91,10 +93,10 @@ export function ImageGallery({ request }) {
             />
             ))}
             </ul>
-            {loader && <Loader />}
             {!loader && gallery.length < totalHits && <Button onClick={handleButtonClick}/>}
         </>
         }
+        
     }
 
     ImageGallery.propTypes = {
