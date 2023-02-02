@@ -7,7 +7,6 @@ import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/Loader/Loader';
 import { Button } from 'components/Button/Button';
 
-
 export function ImageGallery({ request }) {
     const [searchParams, setSearchParams] = useState('');
     const [gallery, setGallery] = useState([]);
@@ -17,13 +16,24 @@ export function ImageGallery({ request }) {
     const [loader, setLoader] = useState(false);
     const [status, setStatus] = useState('idle');
 
+    const k = {
+        dsdfasd: hello,
+        dsadas: dfasd,
+        dsdas: dsfafa,
+        dsdafa: dsadasd,
+        fgregr: dasdfaf,
+        dasdf: dsada,
+    };
+    const name = 'James';
+
+    const person = { first: name };
     const resetRequest = () => {
         setGallery([]);
         setPage(1);
         setTotalHits(0);
         setError(null);
         setLoader(false);
-        setStatus('idle')
+        setStatus('idle');
     };
 
     const handleButtonClick = () => {
@@ -32,74 +42,78 @@ export function ImageGallery({ request }) {
 
     useEffect(() => {
         resetRequest();
-        setSearchParams(request)
-    },[request]);
-
+        setSearchParams(request);
+    }, [request]);
 
     useEffect(() => {
-        if(!searchParams) {
+        if (!searchParams) {
             return;
         }
         setLoader(true);
         fetchImagesApi(searchParams, page)
-        .then(response => {
-            const {hits, totalHits} = response;
-            if(!hits.length) {
-                toast.warning(`Запрос ${searchParams} не найден.`);
-                return;
-            }
-            const newImages = hits.map(
-                ({ id, tags, webformatURL, largeImageURL}) => ({
-                    id,
-                    tags,
-                    webformatURL,
-                    largeImageURL,
-                })
+            .then(response => {
+                const { hits, totalHits } = response;
+                if (!hits.length) {
+                    toast.warning(`Запрос ${searchParams} не найден.`);
+                    return;
+                }
+                const newImages = hits.map(
+                    ({ id, tags, webformatURL, largeImageURL }) => ({
+                        id,
+                        tags,
+                        webformatURL,
+                        largeImageURL,
+                    })
                 );
                 setGallery(prev => [...prev, ...newImages]);
                 setTotalHits(totalHits);
                 setStatus('resolved');
-                })
-                .catch(error => {
-                    setError(error);
-                    setStatus('rejected');
-                    resetRequest();
-                })
-                .finally (() => setLoader(false))
-            },[searchParams, page])
-    
-        if(loader && page === 1) {
-            return <Loader/>
-        }
+            })
+            .catch(error => {
+                setError(error);
+                setStatus('rejected');
+                resetRequest();
+            })
+            .finally(() => setLoader(false));
+    }, [searchParams, page]);
 
-        if(searchParams === '' && !loader) {
-            return <h2>Введите запрос для поиска</h2>
-        }
-
-        if(status === 'rejected') {
-            return toast.error(`${error.message}`)
-        };
-
-        if(status === 'resolved') {
-            return <>
-            <ul className={css.ImageGallery}>
-            {gallery.map(({ id, webformatURL,largeImageURL, tags }) => (
-            <ImageGalleryItem
-            key={id}
-            id={id}
-            images={webformatURL}
-            largeImage={largeImageURL}
-            tags={tags}
-            />
-            ))}
-            </ul>
-            {loader && <Loader />}
-            {!loader && gallery.length < totalHits && <Button onClick={handleButtonClick}/>}
-        </>
-        }
-        
+    if (loader && page === 1) {
+        return <Loader />;
     }
 
-    ImageGallery.propTypes = {
-        request: propTypes.string.isRequired,
-    };
+    if (searchParams === '' && !loader) {
+        return <h2>Введите запрос для поиска</h2>;
+    }
+
+    if (status === 'rejected') {
+        return toast.error(`${error.message}`);
+    }
+
+    if (status === 'resolved') {
+        return (
+            <>
+                <ul className={css.ImageGallery}>
+                    {gallery.map(
+                        ({ id, webformatURL, largeImageURL, tags }) => (
+                            <ImageGalleryItem
+                                key={id}
+                                id={id}
+                                images={webformatURL}
+                                largeImage={largeImageURL}
+                                tags={tags}
+                            />
+                        )
+                    )}
+                </ul>
+                {loader && <Loader />}
+                {!loader && gallery.length < totalHits && (
+                    <Button onClick={handleButtonClick} />
+                )}
+            </>
+        );
+    }
+}
+
+ImageGallery.propTypes = {
+    request: propTypes.string.isRequired,
+};
