@@ -68,7 +68,7 @@ export function ImageGallery({ request }) {
                 .finally (() => setLoader(false))
             },[searchParams, page])
     
-        if(loader) {
+        if(loader && page === 1) {
             return <Loader/>
         }
 
@@ -93,6 +93,7 @@ export function ImageGallery({ request }) {
             />
             ))}
             </ul>
+            {loader && <Loader />}
             {!loader && gallery.length < totalHits && <Button onClick={handleButtonClick}/>}
         </>
         }
