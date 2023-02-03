@@ -70,7 +70,7 @@ export function ImageGallery({ request }) {
         return <Loader />;
     }
 
-    if (searchParams === '' && !loader) {
+    if (searchParams === '' && !loader && page === 1) {
         return <h2>Введите запрос для поиска</h2>;
     }
 
