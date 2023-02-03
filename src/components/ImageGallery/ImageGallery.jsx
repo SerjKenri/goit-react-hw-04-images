@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import propTypes from 'prop-types';
 import css from './ImageGallery.module.css';
-import { fetchImagesApi } from 'api/api';
+import fetchImagesApi from 'Api/fetchImages';
 import { toast } from 'react-toastify';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { Loader } from 'components/Loader/Loader';
