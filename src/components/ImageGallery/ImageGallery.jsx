@@ -44,6 +44,7 @@ export function ImageGallery({ request }) {
                 const { hits, totalHits } = response;
                 if (!hits.length) {
                     toast.warning(`Запрос ${searchParams} не найден.`);
+                    resetRequest();
                     return;
                 }
                 const newImages = hits.map(
